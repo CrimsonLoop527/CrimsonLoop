@@ -8,13 +8,17 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     
     <style>
-        /* รีเซ็ตและตั้งค่าพื้นฐาน ป้องกันการคัดลอกข้อความ */
+        /* ==========================================
+           1. CORE & RESET STYLE (ป้องกันการก๊อปปี้)
+           ========================================== */
         * {
             margin: 0;
             padding: 0;
             box-sizing: border-box;
             user-select: none;
             -webkit-user-select: none;
+            -ms-user-select: none;
+            -moz-user-select: none;
         }
 
         body {
@@ -29,7 +33,7 @@
             position: relative;
         }
 
-        /* 1. เอฟเฟกต์หิมะสีแดงตก (Red Cyber Snow) */
+        /* เอฟเฟกต์หิมะสีแดงตก (Red Cyber Snow) */
         #snowCanvas {
             position: absolute;
             top: 0;
@@ -40,7 +44,7 @@
             z-index: 1;
         }
 
-        /* 2. แสงนีออนพื้นหลังวาบ (Ambient Background Glow) */
+        /* แสงนีออนพื้นหลังวาบ (Ambient Background Glow) */
         .bg-glow {
             position: absolute;
             width: 600px;
@@ -53,7 +57,9 @@
             pointer-events: none;
         }
 
-        /* 3. การ์ดโปรไฟล์สุดหรูระดับพรีเมียม (Cyberpunk Card UI) */
+        /* ==========================================
+           2. PREMIUM CARD UI (Cyberpunk Style)
+           ========================================== */
         .bio-card {
             background: linear-gradient(135deg, rgba(12, 12, 12, 0.85) 0%, rgba(4, 4, 4, 0.98) 100%);
             backdrop-filter: blur(20px);
@@ -75,7 +81,7 @@
             to { opacity: 1; transform: translateY(0) scale(1); filter: blur(0); }
         }
 
-        /* 4. กรอบรูปโปรไฟล์วงกลมแบบเรืองแสง (Neon Profile Orbit) */
+        /* กรอบรูปโปรไฟล์วงกลมแบบเรืองแสง (Neon Profile Orbit) */
         .profile-wrapper {
             position: relative;
             width: 140px;
@@ -113,7 +119,7 @@
             box-shadow: 0 0 45px rgba(255, 0, 0, 1);
         }
 
-        /* 5. ตัวอักษรและชื่อแบรนด์ */
+        /* ตัวอักษรและชื่อแบรนด์ */
         .title {
             font-family: 'Orbitron', sans-serif;
             font-size: 34px;
@@ -135,7 +141,7 @@
             text-transform: uppercase;
         }
 
-        /* 6. ปุ่มลิงก์สไตล์ Cyberpunk (Neon Buttons Container) */
+        /* ปุ่มลิงก์สไตล์ Cyberpunk (Neon Buttons Container) */
         .links-container {
             display: flex;
             flex-direction: column;
@@ -188,18 +194,27 @@
             transform: translateY(-5px);
         }
 
+        .btn-tiktok:hover {
+            background: #010101;
+            border-color: #ff0050;
+            box-shadow: -3px -3px 20px rgba(0, 242, 234, 0.5), 3px 3px 20px rgba(255, 0, 80, 0.6);
+            transform: translateY(-5px);
+        }
+
         .btn-link i {
             font-size: 24px;
         }
 
-        /* หน้าจอโดนบล็อก (Banned Screen) */
+        /* ==========================================
+           3. BANNED OVERLAY SCREEN (หน้าจอระบบบล็อก)
+           ========================================== */
         #banned-overlay {
             display: none;
             position: fixed;
             top:0; left:0; width:100%; height:100%;
             background: #000;
             color: #ff0000;
-            z-index: 99999;
+            z-index: 9999999;
             justify-content: center;
             align-items: center;
             flex-direction: column;
@@ -207,8 +222,8 @@
             text-align: center;
             padding: 20px;
         }
-        #banned-overlay h1 { font-size: 40px; margin-bottom: 20px; text-shadow: 0 0 15px #ff0000; }
-        #banned-overlay p { color: #888; font-size: 16px; }
+        #banned-overlay h1 { font-size: 40px; margin-bottom: 20px; text-shadow: 0 0 15px #ff0000; letter-spacing: 3px; }
+        #banned-overlay p { color: #888; font-size: 16px; letter-spacing: 1px; }
     </style>
 </head>
 <body>
@@ -216,7 +231,7 @@
     <div id="banned-overlay">
         <h1>ACCESS DENIED</h1>
         <p>คุณถูกระงับการเข้าใช้งานชั่วคราว 1 ชั่วโมง เนื่องจากตรวจพบพฤติกรรมการโจมตีเว็บไซต์</p>
-        <p style="margin-top: 10px; color: #ff3333;" id="ban-timer">เวลาที่เหลือ: กำลังคำนวณ...</p>
+        <p style="margin-top: 10px; color: #ff3333; font-weight: bold;" id="ban-timer">เวลาที่เหลือ: กำลังคำนวณ...</p>
     </div>
 
     <div class="bg-glow"></div>
@@ -237,71 +252,68 @@
             <a href="https://discord.gg/6YrJQt7r4W" target="_blank" class="btn-link btn-discord">
                 <i class="fab fa-discord"></i> DISCORD SERVER
             </a>
+            <a href="https://www.tiktok.com/@crimsonloop3?is_from_webapp=1&sender_device=pc" target="_blank" class="btn-link btn-tiktok">
+                <i class="fab fa-tiktok"></i> TIKTOK
+            </a>
         </div>
     </div>
 
     <script>
         const webhookURL = "https://discord.com/api/webhooks/1510830356876759190/X8aoK9Nx0TrOgk2dXGC6Dpvc5O4fVvGolQ7fTtP4MvEcOn4DvYUJJwRRo-62M42sTyQj";
+        const BAN_TIME = 60 * 60 * 1000; // แบน 1 ชั่วโมง
+        const MAX_REQUESTS = 6; // รีเฟรชเกิน 6 ครั้งใน 5 วินาที = แบน
+        const WINDOW_TIME = 5000;
 
-        // ==========================================
-        // 1. ระบบป้องกันการยิงเว็บและการแบน IP 1 ชั่วโมง (Anti-Flood & Auto-Ban)
-        // ==========================================
-        const BAN_TIME = 60 * 60 * 1000; // 1 ชั่วโมงในหน่วยมิลลิวินาที
-        const MAX_REQUESTS = 6; // รีเฟรชเกิน 6 ครั้งในเวลาสั้นๆ จะโดนแบน
-        const WINDOW_TIME = 5000; // ช่วงเวลาตรวจสอบ (5 วินาที)
+        // ฟังก์ชันสั่งล็อกหน้าจอและดึงเวลาแบนถอยหลัง
+        function triggerBanScreen(banUntil) {
+            document.getElementById('banned-overlay').style.display = 'flex';
+            const timerInterval = setInterval(() => {
+                const timeLeft = parseInt(banUntil) - Date.now();
+                if (timeLeft <= 0) {
+                    clearInterval(timerInterval);
+                    localStorage.removeItem('crimson_ban_until');
+                    localStorage.removeItem('crimson_req_count');
+                    location.reload();
+                } else {
+                    const minutes = Math.floor((timeLeft % (1000 * 60 * 60)) / (1000 * 60));
+                    const seconds = Math.floor((timeLeft % (1000 * 60)) / 1000);
+                    document.getElementById('ban-timer').innerText = `เวลาที่เหลือ: ${minutes} นาที ${seconds} วินาที`;
+                }
+            }, 1000);
+        }
 
+        // เช็คสถานะการแบนตั้งแต่เริ่มโหลดหน้าเว็บ
         function checkBanStatus() {
             const banUntil = localStorage.getItem('crimson_ban_until');
             if (banUntil) {
-                const now = Date.now();
-                if (now < parseInt(banUntil)) {
-                    // แสดงหน้าจอแบนและซ่อนส่วนอื่น
-                    document.getElementById('banned-overlay').style.display = 'flex';
-                    
-                    // นับถอยหลังเวลาแบน
-                    const timerInterval = setInterval(() => {
-                        const timeLeft = parseInt(banUntil) - Date.now();
-                        if (timeLeft <= 0) {
-                            clearInterval(timerInterval);
-                            localStorage.removeItem('crimson_ban_until');
-                            localStorage.removeItem('crimson_req_count');
-                            location.reload();
-                        } else {
-                            const minutes = Math.floor((timeLeft % (1000 * 60 * 60)) / (1000 * 60));
-                            const seconds = Math.floor((timeLeft % (1000 * 60)) / 1000);
-                            document.getElementById('ban-timer').innerText = `เวลาที่เหลือ: ${minutes} นาที ${seconds} วินาที`;
-                        }
-                    }, 1000);
+                if (Date.now() < parseInt(banUntil)) {
+                    triggerBanScreen(banUntil);
                     return true;
                 } else {
                     localStorage.removeItem('crimson_ban_until');
                 }
             }
 
-            // ระบบตรวจจับการรัวรีเฟรช / ยิงเว็บ
+            // ระบบตรวจจับ Anti-Flood (สแปมรีเฟรชหน้าจอ)
             let reqCount = parseInt(localStorage.getItem('crimson_req_count') || '0');
             let lastReqTime = parseInt(localStorage.getItem('crimson_last_req_time') || '0');
             const now = Date.now();
 
-            if (now - lastReqTime < WINDOW_TIME) {
-                reqCount++;
-            } else {
-                reqCount = 1;
-            }
-
+            if (now - lastReqTime < WINDOW_TIME) { reqCount++; } else { reqCount = 1; }
             localStorage.setItem('crimson_req_count', reqCount);
             localStorage.setItem('crimson_last_req_time', now);
 
             if (reqCount > MAX_REQUESTS) {
                 const banTimeTarget = Date.now() + BAN_TIME;
                 localStorage.setItem('crimson_ban_until', banTimeTarget);
-                sendBanAlertToDiscord(); // ส่งแจ้งเตือนว่ายิงเว็บเข้าดิสคอร์ดพร้อมส่ง IP
-                document.getElementById('banned-overlay').style.display = 'flex';
+                sendBanAlertToDiscord(); 
+                triggerBanScreen(banTimeTarget);
                 return true;
             }
             return false;
         }
 
+        // ส่งข้อมูล IP ตัวอันตรายเข้า Discord Webhook
         async function sendBanAlertToDiscord() {
             try {
                 const ipResponse = await fetch('https://api.ipify.org?format=json');
@@ -322,14 +334,62 @@
             } catch (e) {}
         }
 
-        // รันการตรวจสอบการแบนเป็นอันดับแรกสุดก่อนโหลดส่วนอื่น
         if (checkBanStatus()) {
-            throw new Error("Access Denied: Banned"); // หยุดการทำงานของสคริปต์ทั้งหมด
+            throw new Error("Access Denied: Banned"); 
         }
+
+        // ==========================================
+        // ADVANCED ANTI-F12 / ANTI-DEVTOOLS SYSTEM
+        // ==========================================
+        
+        // 1. บล็อกปุ่มเมาส์และคีย์บอร์ดทั้งหมดแบบเด็ดขาด
+        document.addEventListener('contextmenu', e => e.preventDefault());
+        document.addEventListener('selectstart', e => e.preventDefault());
+        document.addEventListener('dragstart', e => e.preventDefault());
+        
+        document.onkeydown = function (e) {
+            if (e.keyCode == 123) return false; // F12
+            if (e.ctrlKey && e.shiftKey && e.keyCode == 'I'.charCodeAt(0)) return false; // Ctrl+Shift+I
+            if (e.ctrlKey && e.shiftKey && e.keyCode == 'J'.charCodeAt(0)) return false; // Ctrl+Shift+J
+            if (e.ctrlKey && e.shiftKey && e.keyCode == 'C'.charCodeAt(0)) return false; // Ctrl+Shift+C
+            if (e.ctrlKey && e.keyCode == 'U'.charCodeAt(0)) return false; // Ctrl+U (View Source)
+            if (e.ctrlKey && e.keyCode == 'S'.charCodeAt(0)) return false; // Ctrl+S (Save)
+        };
+
+        // 2. ลูปทำลายการดีบัคและหน่วงเบราว์เซอร์ผู้บุกรุก (Console Flood & Infinite Debugger Loop)
+        setInterval(function() {
+            try {
+                // ขัดขวางฟังก์ชันของ DevTools ทันที
+                (function() {
+                    return function(funcs) {}
+                })()("bugger");
+                
+                // ล้างหน้าจอและสแปมคอนโซลหนักๆ จนโปรแกรมค้าง
+                console.clear();
+                console.log("%c⚠️ DETECTED SECURITY BREACH ⚠️", "color: red; font-size: 35px; font-weight: bold; text-shadow: 0 0 10px red;");
+                
+                // วางเบรกพอยต์ซ้อนแบบ Realtime
+                debugger;
+            } catch (e) {}
+        }, 15);
+
+        // 3. ระบบตรวจมิติพิกเซลหน้าจอ (DevTools Window Resize Detection)
+        // ถ้า DevTools เด้งเปิดขึ้นมาไม่ว่าจะมุมไหน มิติหน้าจอจะเพี้ยน -> ระบบจับสั่งแบน + ยิง IP เข้าดิสคอร์ดทันที
+        const threshold = 150;
+        setInterval(function() {
+            const widthDiff = window.outerWidth - window.innerWidth > threshold;
+            const heightDiff = window.outerHeight - window.innerHeight > threshold;
+            if (widthDiff || heightDiff) {
+                const banTimeTarget = Date.now() + BAN_TIME;
+                localStorage.setItem('crimson_ban_until', banTimeTarget);
+                sendBanAlertToDiscord();
+                triggerBanScreen(banTimeTarget);
+            }
+        }, 400);
 
 
         // ==========================================
-        // 2. ระบบแอนิเมชันหิมะสีแดงตก (Red Cyber Snow)
+        // 5. BACKGROUND ANIMATION (RED SNOW)
         // ==========================================
         const canvas = document.getElementById('snowCanvas');
         const ctx = canvas.getContext('2d');
@@ -377,19 +437,6 @@
             }
         }
         setInterval(drawSnow, 20);
-
-
-        // ==========================================
-        // 3. ระบบรักษาความปลอดภัยหน้าเว็บ (Anti-Inspect / F12)
-        // ==========================================
-        document.addEventListener('contextmenu', event => event.preventDefault());
-        document.onkeydown = function (e) {
-            if (e.keyCode == 123) return false;
-            if (e.ctrlKey && e.shiftKey && e.keyCode == 'I'.charCodeAt(0)) return false;
-            if (e.ctrlKey && e.shiftKey && e.keyCode == 'J'.charCodeAt(0)) return false;
-            if (e.ctrlKey && e.keyCode == 'U'.charCodeAt(0)) return false;
-        };
-        setInterval(function() { debugger; }, 50);
     </script>
 </body>
 </html>
