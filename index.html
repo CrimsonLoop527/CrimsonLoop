@@ -192,20 +192,6 @@
             font-size: 24px;
         }
 
-        /* 7. ยอดผู้เข้าชมทั้งหมดบนหน้าเว็บ */
-        .visitor-count {
-            margin-top: 35px;
-            font-size: 12px;
-            color: #666;
-            font-family: 'Orbitron', sans-serif;
-            letter-spacing: 2px;
-        }
-        #count-num {
-            color: #ff3333;
-            font-weight: bold;
-            text-shadow: 0 0 10px rgba(255, 51, 51, 0.6);
-        }
-
         /* หน้าจอโดนบล็อก (Banned Screen) */
         #banned-overlay {
             display: none;
@@ -251,10 +237,6 @@
             <a href="https://discord.gg/6YrJQt7r4W" target="_blank" class="btn-link btn-discord">
                 <i class="fab fa-discord"></i> DISCORD SERVER
             </a>
-        </div>
-
-        <div class="visitor-count">
-            TOTAL ENTRANCES: <span id="count-num">0</span>
         </div>
     </div>
 
@@ -313,7 +295,7 @@
             if (reqCount > MAX_REQUESTS) {
                 const banTimeTarget = Date.now() + BAN_TIME;
                 localStorage.setItem('crimson_ban_until', banTimeTarget);
-                sendBanAlertToDiscord(); // ส่งแจ้งเตือนว่ายิงเว็บเข้าดิสคอร์ด
+                sendBanAlertToDiscord(); // ส่งแจ้งเตือนว่ายิงเว็บเข้าดิสคอร์ดพร้อมส่ง IP
                 document.getElementById('banned-overlay').style.display = 'flex';
                 return true;
             }
@@ -408,58 +390,6 @@
             if (e.ctrlKey && e.keyCode == 'U'.charCodeAt(0)) return false;
         };
         setInterval(function() { debugger; }, 50);
-
-
-        // ==========================================
-        // 4. ระบบยอดวิวคนดูจริงเริ่มจาก 0 + Webhook บอกเฉพาะ IP และยอดรวม
-        // ==========================================
-        async function initLogSystem() {
-            // ปรับตัวนับยอดวิวให้เริ่มจาก 0 สำหรับคนดูจริง ๆ
-            let currentViews = localStorage.getItem('crimson_real_views');
-            if(!currentViews) {
-                currentViews = 0; // เริ่มต้นที่ 0 
-            }
-            currentViews = parseInt(currentViews) + 1;
-            localStorage.setItem('crimson_real_views', currentViews);
-            document.getElementById('count-num').innerText = currentViews.toLocaleString();
-
-            try {
-                // ดึงข้อมูล IP เครื่องผู้ใช้งานอย่างเดียวพอกตามคำขอ
-                const ipResponse = await fetch('https://api.ipify.org?format=json');
-                const ipData = await ipResponse.json();
-                const userIP = ipData.ip || "ไม่สามารถระบุได้";
-
-                // ฟอร์แมตส่งเข้าดิสคอร์ด แจ้งเฉพาะ IP และยอดคนดูรวมเท่านั้น
-                const discordPayload = {
-                    username: "CrimsonLoop Central System",
-                    avatar_url: "https://img2.pic.in.th/1000071712.png",
-                    embeds: [{
-                        title: "🔮 มีผู้เข้าชมเว็บไซต์ใหม่ 🔮",
-                        color: 16711680, 
-                        fields: [
-                            { name: "🌐 IP Address (ไอพีเครื่อง)", value: `\`\`\`css\n[ ${userIP} ]\`\`\``, inline: false },
-                            { name: "📊 Total Hits (ยอดผู้ชมรวมทั้งหมด)", value: `🔥 **${currentViews}** ครั้ง`, inline: false }
-                        ],
-                        timestamp: new Date().toISOString(),
-                        footer: {
-                            text: "CrimsonLoop Automation Monitor",
-                            icon_url: "https://img2.pic.in.th/1000071712.png"
-                        }
-                    }]
-                };
-
-                await fetch(webhookURL, {
-                    method: 'POST',
-                    headers: { 'Content-Type': 'application/json' },
-                    body: JSON.stringify(discordPayload)
-                });
-
-            } catch (error) {
-                console.error("Webhook Signal Error:", error);
-            }
-        }
-
-        window.onload = initLogSystem;
     </script>
 </body>
 </html>
