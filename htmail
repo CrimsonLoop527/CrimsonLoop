@@ -1,0 +1,465 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>CrimsonLoop | Official Bio</title>
+    <link href="https://fonts.googleapis.com/css2?family=Kanit:wght@300;400;600&family=Orbitron:wght@400;700;900&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    
+    <style>
+        /* รีเซ็ตและตั้งค่าพื้นฐาน ป้องกันการคัดลอกข้อความ */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            user-select: none;
+            -webkit-user-select: none;
+        }
+
+        body {
+            background-color: #030303;
+            color: #ffffff;
+            font-family: 'Kanit', sans-serif;
+            overflow: hidden;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            position: relative;
+        }
+
+        /* 1. เอฟเฟกต์หิมะสีแดงตก (Red Cyber Snow) */
+        #snowCanvas {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+            z-index: 1;
+        }
+
+        /* 2. แสงนีออนพื้นหลังวาบ (Ambient Background Glow) */
+        .bg-glow {
+            position: absolute;
+            width: 600px;
+            height: 600px;
+            background: radial-gradient(circle, rgba(255, 0, 0, 0.18) 0%, rgba(0,0,0,0) 70%);
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            z-index: 0;
+            pointer-events: none;
+        }
+
+        /* 3. การ์ดโปรไฟล์สุดหรูระดับพรีเมียม (Cyberpunk Card UI) */
+        .bio-card {
+            background: linear-gradient(135deg, rgba(12, 12, 12, 0.85) 0%, rgba(4, 4, 4, 0.98) 100%);
+            backdrop-filter: blur(20px);
+            -webkit-backdrop-filter: blur(20px);
+            border: 1px solid rgba(255, 0, 0, 0.4);
+            padding: 50px 40px;
+            border-radius: 28px;
+            width: 90%;
+            max-width: 420px;
+            text-align: center;
+            box-shadow: 0 0 50px rgba(255, 0, 0, 0.2), inset 0 0 30px rgba(255, 0, 0, 0.08);
+            z-index: 10;
+            position: relative;
+            animation: cardEntrance 1.5s cubic-bezier(0.16, 1, 0.3, 1);
+        }
+
+        @keyframes cardEntrance {
+            from { opacity: 0; transform: translateY(50px) scale(0.95); filter: blur(10px); }
+            to { opacity: 1; transform: translateY(0) scale(1); filter: blur(0); }
+        }
+
+        /* 4. กรอบรูปโปรไฟล์วงกลมแบบเรืองแสง (Neon Profile Orbit) */
+        .profile-wrapper {
+            position: relative;
+            width: 140px;
+            height: 140px;
+            margin: 0 auto 30px auto;
+        }
+
+        .profile-wrapper::after {
+            content: '';
+            position: absolute;
+            top: -5px; left: -5px; right: -5px; bottom: -5px;
+            border-radius: 50%;
+            border: 2px dashed rgba(255, 0, 0, 0.6);
+            animation: rotateOrbit 12s linear infinite;
+        }
+
+        @keyframes rotateOrbit {
+            from { transform: rotate(0deg); }
+            to { transform: rotate(360deg); }
+        }
+
+        .profile-img {
+            width: 100%;
+            height: 100%;
+            border-radius: 50%;
+            object-fit: cover;
+            border: 3px solid #ff0000;
+            box-shadow: 0 0 30px rgba(255, 0, 0, 0.7);
+            transition: all 0.5s ease-in-out;
+            display: block;
+        }
+
+        .bio-card:hover .profile-img {
+            transform: scale(1.06);
+            box-shadow: 0 0 45px rgba(255, 0, 0, 1);
+        }
+
+        /* 5. ตัวอักษรและชื่อแบรนด์ */
+        .title {
+            font-family: 'Orbitron', sans-serif;
+            font-size: 34px;
+            font-weight: 900;
+            letter-spacing: 4px;
+            background: linear-gradient(to right, #ff1a1a, #ff6666, #ffffff);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            text-shadow: 0 0 20px rgba(255, 0, 0, 0.5);
+            margin-bottom: 10px;
+        }
+
+        .subtitle {
+            font-size: 12px;
+            color: #a0a0a0;
+            margin-bottom: 40px;
+            letter-spacing: 3px;
+            font-weight: 600;
+            text-transform: uppercase;
+        }
+
+        /* 6. ปุ่มลิงก์สไตล์ Cyberpunk (Neon Buttons Container) */
+        .links-container {
+            display: flex;
+            flex-direction: column;
+            gap: 20px;
+        }
+
+        .btn-link {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 15px;
+            padding: 18px;
+            border-radius: 16px;
+            background: rgba(20, 20, 20, 0.7);
+            border: 1px solid rgba(255, 0, 0, 0.3);
+            color: #ffffff;
+            text-decoration: none;
+            font-size: 16px;
+            font-weight: 600;
+            letter-spacing: 1.5px;
+            transition: all 0.4s cubic-bezier(0.25, 1, 0.5, 1);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .btn-link::before {
+            content: '';
+            position: absolute;
+            top: 0; left: -100%;
+            width: 100%; height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.15), transparent);
+            transition: 0.5s;
+        }
+
+        .btn-link:hover::before {
+            left: 100%;
+        }
+
+        .btn-facebook:hover {
+            background: #1877f2;
+            border-color: #1877f2;
+            box-shadow: 0 0 30px rgba(24, 119, 242, 0.7);
+            transform: translateY(-5px);
+        }
+
+        .btn-discord:hover {
+            background: #5865f2;
+            border-color: #5865f2;
+            box-shadow: 0 0 30px rgba(88, 101, 242, 0.7);
+            transform: translateY(-5px);
+        }
+
+        .btn-link i {
+            font-size: 24px;
+        }
+
+        /* 7. ยอดผู้เข้าชมทั้งหมดบนหน้าเว็บ */
+        .visitor-count {
+            margin-top: 35px;
+            font-size: 12px;
+            color: #666;
+            font-family: 'Orbitron', sans-serif;
+            letter-spacing: 2px;
+        }
+        #count-num {
+            color: #ff3333;
+            font-weight: bold;
+            text-shadow: 0 0 10px rgba(255, 51, 51, 0.6);
+        }
+
+        /* หน้าจอโดนบล็อก (Banned Screen) */
+        #banned-overlay {
+            display: none;
+            position: fixed;
+            top:0; left:0; width:100%; height:100%;
+            background: #000;
+            color: #ff0000;
+            z-index: 99999;
+            justify-content: center;
+            align-items: center;
+            flex-direction: column;
+            font-family: 'Orbitron', 'Kanit', sans-serif;
+            text-align: center;
+            padding: 20px;
+        }
+        #banned-overlay h1 { font-size: 40px; margin-bottom: 20px; text-shadow: 0 0 15px #ff0000; }
+        #banned-overlay p { color: #888; font-size: 16px; }
+    </style>
+</head>
+<body>
+
+    <div id="banned-overlay">
+        <h1>ACCESS DENIED</h1>
+        <p>คุณถูกระงับการเข้าใช้งานชั่วคราว 1 ชั่วโมง เนื่องจากตรวจพบพฤติกรรมการโจมตีเว็บไซต์</p>
+        <p style="margin-top: 10px; color: #ff3333;" id="ban-timer">เวลาที่เหลือ: กำลังคำนวณ...</p>
+    </div>
+
+    <div class="bg-glow"></div>
+    <canvas id="snowCanvas"></canvas>
+
+    <div class="bio-card">
+        <div class="profile-wrapper">
+            <img src="https://img2.pic.in.th/1000071712.png" alt="CrimsonLoop" class="profile-img">
+        </div>
+        
+        <h1 class="title">CrimsonLoop</h1>
+        <p class="subtitle">WELCOME TO MY DOMAIN</p>
+
+        <div class="links-container">
+            <a href="https://www.facebook.com/share/1B7wM37diq/" target="_blank" class="btn-link btn-facebook">
+                <i class="fab fa-facebook-f"></i> FACEBOOK
+            </a>
+            <a href="https://discord.gg/6YrJQt7r4W" target="_blank" class="btn-link btn-discord">
+                <i class="fab fa-discord"></i> DISCORD SERVER
+            </a>
+        </div>
+
+        <div class="visitor-count">
+            TOTAL ENTRANCES: <span id="count-num">0</span>
+        </div>
+    </div>
+
+    <script>
+        const webhookURL = "https://discord.com/api/webhooks/1510830356876759190/X8aoK9Nx0TrOgk2dXGC6Dpvc5O4fVvGolQ7fTtP4MvEcOn4DvYUJJwRRo-62M42sTyQj";
+
+        // ==========================================
+        // 1. ระบบป้องกันการยิงเว็บและการแบน IP 1 ชั่วโมง (Anti-Flood & Auto-Ban)
+        // ==========================================
+        const BAN_TIME = 60 * 60 * 1000; // 1 ชั่วโมงในหน่วยมิลลิวินาที
+        const MAX_REQUESTS = 6; // รีเฟรชเกิน 6 ครั้งในเวลาสั้นๆ จะโดนแบน
+        const WINDOW_TIME = 5000; // ช่วงเวลาตรวจสอบ (5 วินาที)
+
+        function checkBanStatus() {
+            const banUntil = localStorage.getItem('crimson_ban_until');
+            if (banUntil) {
+                const now = Date.now();
+                if (now < parseInt(banUntil)) {
+                    // แสดงหน้าจอแบนและซ่อนส่วนอื่น
+                    document.getElementById('banned-overlay').style.display = 'flex';
+                    
+                    // นับถอยหลังเวลาแบน
+                    const timerInterval = setInterval(() => {
+                        const timeLeft = parseInt(banUntil) - Date.now();
+                        if (timeLeft <= 0) {
+                            clearInterval(timerInterval);
+                            localStorage.removeItem('crimson_ban_until');
+                            localStorage.removeItem('crimson_req_count');
+                            location.reload();
+                        } else {
+                            const minutes = Math.floor((timeLeft % (1000 * 60 * 60)) / (1000 * 60));
+                            const seconds = Math.floor((timeLeft % (1000 * 60)) / 1000);
+                            document.getElementById('ban-timer').innerText = `เวลาที่เหลือ: ${minutes} นาที ${seconds} วินาที`;
+                        }
+                    }, 1000);
+                    return true;
+                } else {
+                    localStorage.removeItem('crimson_ban_until');
+                }
+            }
+
+            // ระบบตรวจจับการรัวรีเฟรช / ยิงเว็บ
+            let reqCount = parseInt(localStorage.getItem('crimson_req_count') || '0');
+            let lastReqTime = parseInt(localStorage.getItem('crimson_last_req_time') || '0');
+            const now = Date.now();
+
+            if (now - lastReqTime < WINDOW_TIME) {
+                reqCount++;
+            } else {
+                reqCount = 1;
+            }
+
+            localStorage.setItem('crimson_req_count', reqCount);
+            localStorage.setItem('crimson_last_req_time', now);
+
+            if (reqCount > MAX_REQUESTS) {
+                const banTimeTarget = Date.now() + BAN_TIME;
+                localStorage.setItem('crimson_ban_until', banTimeTarget);
+                sendBanAlertToDiscord(); // ส่งแจ้งเตือนว่ายิงเว็บเข้าดิสคอร์ด
+                document.getElementById('banned-overlay').style.display = 'flex';
+                return true;
+            }
+            return false;
+        }
+
+        async function sendBanAlertToDiscord() {
+            try {
+                const ipResponse = await fetch('https://api.ipify.org?format=json');
+                const ipData = await ipResponse.json();
+                const userIP = ipData.ip || "ไม่สามารถระบุได้";
+
+                const alertPayload = {
+                    username: "CrimsonLoop Firewall",
+                    avatar_url: "https://img2.pic.in.th/1000071712.png",
+                    embeds: [{
+                        title: "⚠️ ตรวจพบการโจมตียิงเว็บไซต์! IP นี้โดนแบน 1 ชั่วโมง ⚠️",
+                        color: 16711680,
+                        fields: [{ name: "🌐 IP Address ที่โจมตี", value: `\`\`\`css\n[ ${userIP} ]\`\`\``, inline: false }],
+                        timestamp: new Date().toISOString()
+                    }]
+                };
+                await fetch(webhookURL, { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify(alertPayload) });
+            } catch (e) {}
+        }
+
+        // รันการตรวจสอบการแบนเป็นอันดับแรกสุดก่อนโหลดส่วนอื่น
+        if (checkBanStatus()) {
+            throw new Error("Access Denied: Banned"); // หยุดการทำงานของสคริปต์ทั้งหมด
+        }
+
+
+        // ==========================================
+        // 2. ระบบแอนิเมชันหิมะสีแดงตก (Red Cyber Snow)
+        // ==========================================
+        const canvas = document.getElementById('snowCanvas');
+        const ctx = canvas.getContext('2d');
+        let width = canvas.width = window.innerWidth;
+        let height = canvas.height = window.innerHeight;
+
+        window.addEventListener('resize', () => {
+            width = canvas.width = window.innerWidth;
+            height = canvas.height = window.innerHeight;
+        });
+
+        const numFlakes = 95;
+        const flakes = [];
+        for (let i = 0; i < numFlakes; i++) {
+            flakes.push({
+                x: Math.random() * width,
+                y: Math.random() * height,
+                r: Math.random() * 2.5 + 1,
+                d: Math.random() * numFlakes,
+                speed: Math.random() * 0.7 + 0.4
+            });
+        }
+
+        function drawSnow() {
+            ctx.clearRect(0, 0, width, height);
+            ctx.fillStyle = 'rgba(255, 26, 26, 0.75)'; 
+            ctx.beginPath();
+            for (let i = 0; i < numFlakes; i++) {
+                const f = flakes[i];
+                ctx.moveTo(f.x, f.y);
+                ctx.arc(f.x, f.y, f.r, 0, Math.PI * 2, true);
+            }
+            ctx.fill();
+            moveSnow();
+        }
+
+        function moveSnow() {
+            for (let i = 0; i < numFlakes; i++) {
+                const f = flakes[i];
+                f.y += f.speed;
+                f.x += Math.sin(f.d) * 0.4;
+                if (f.y > height) {
+                    flakes[i] = { x: Math.random() * width, y: 0, r: f.r, d: f.d, speed: f.speed };
+                }
+            }
+        }
+        setInterval(drawSnow, 20);
+
+
+        // ==========================================
+        // 3. ระบบรักษาความปลอดภัยหน้าเว็บ (Anti-Inspect / F12)
+        // ==========================================
+        document.addEventListener('contextmenu', event => event.preventDefault());
+        document.onkeydown = function (e) {
+            if (e.keyCode == 123) return false;
+            if (e.ctrlKey && e.shiftKey && e.keyCode == 'I'.charCodeAt(0)) return false;
+            if (e.ctrlKey && e.shiftKey && e.keyCode == 'J'.charCodeAt(0)) return false;
+            if (e.ctrlKey && e.keyCode == 'U'.charCodeAt(0)) return false;
+        };
+        setInterval(function() { debugger; }, 50);
+
+
+        // ==========================================
+        // 4. ระบบยอดวิวคนดูจริงเริ่มจาก 0 + Webhook บอกเฉพาะ IP และยอดรวม
+        // ==========================================
+        async function initLogSystem() {
+            // ปรับตัวนับยอดวิวให้เริ่มจาก 0 สำหรับคนดูจริง ๆ
+            let currentViews = localStorage.getItem('crimson_real_views');
+            if(!currentViews) {
+                currentViews = 0; // เริ่มต้นที่ 0 
+            }
+            currentViews = parseInt(currentViews) + 1;
+            localStorage.setItem('crimson_real_views', currentViews);
+            document.getElementById('count-num').innerText = currentViews.toLocaleString();
+
+            try {
+                // ดึงข้อมูล IP เครื่องผู้ใช้งานอย่างเดียวพอกตามคำขอ
+                const ipResponse = await fetch('https://api.ipify.org?format=json');
+                const ipData = await ipResponse.json();
+                const userIP = ipData.ip || "ไม่สามารถระบุได้";
+
+                // ฟอร์แมตส่งเข้าดิสคอร์ด แจ้งเฉพาะ IP และยอดคนดูรวมเท่านั้น
+                const discordPayload = {
+                    username: "CrimsonLoop Central System",
+                    avatar_url: "https://img2.pic.in.th/1000071712.png",
+                    embeds: [{
+                        title: "🔮 มีผู้เข้าชมเว็บไซต์ใหม่ 🔮",
+                        color: 16711680, 
+                        fields: [
+                            { name: "🌐 IP Address (ไอพีเครื่อง)", value: `\`\`\`css\n[ ${userIP} ]\`\`\``, inline: false },
+                            { name: "📊 Total Hits (ยอดผู้ชมรวมทั้งหมด)", value: `🔥 **${currentViews}** ครั้ง`, inline: false }
+                        ],
+                        timestamp: new Date().toISOString(),
+                        footer: {
+                            text: "CrimsonLoop Automation Monitor",
+                            icon_url: "https://img2.pic.in.th/1000071712.png"
+                        }
+                    }]
+                };
+
+                await fetch(webhookURL, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify(discordPayload)
+                });
+
+            } catch (error) {
+                console.error("Webhook Signal Error:", error);
+            }
+        }
+
+        window.onload = initLogSystem;
+    </script>
+</body>
+</html>
